@@ -34,7 +34,7 @@ def get_item(item_id: int):
 
 
 @app.get("/get-by-name")
-def get_item(name: str):
+def get_by_name(name: str):
     for item_id in inventory:
         if inventory[item_id].name == name:
             return inventory[item_id]
