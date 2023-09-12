@@ -1,5 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+
+class Item(BaseModel):
+    name: str
+    price: float
+    brand: str = None
+
 
 app = FastAPI()
 
@@ -28,7 +36,21 @@ def get_item(item_id: int):
 @app.get("/get-by-name")
 def get_item(name: str):
     for item_id in inventory:
-        if inventory[item_id]["name"] == name:
+        if inventory[item_id].name == name:
             return inventory[item_id]
         else:
             return {"data": "not found"}
+
+
+@app.get("/get-all")
+def get_all():
+    return inventory
+
+
+@app.post("/create-item/{item_id}")
+def create_item(item_id: int, item: Item):
+    if item_id in inventory:
+        return {"Error": "item_id taken"}
+    else:
+        inventory[item_id] = item
+        return {"Response": "success"}
