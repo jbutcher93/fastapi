@@ -23,3 +23,12 @@ def home():
 @app.get("/get-item/{item_id}")
 def get_item(item_id: int):
     return inventory.get(item_id)
+
+
+@app.get("/get-by-name")
+def get_item(name: str):
+    for item_id in inventory:
+        if inventory[item_id]["name"] == name:
+            return inventory[item_id]
+        else:
+            return {"data": "not found"}
